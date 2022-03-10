@@ -37,7 +37,7 @@
 Английский С1 (свободное владение)
 
 **GitHub:**
->https://github.com/EgorSau/ios-homeworks.git
+>https://github.com/EgorSau/CV.git
 
 **Telegram:**
 >@egorsau
