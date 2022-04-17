@@ -17,17 +17,21 @@
 
 **Стек:** 
 - Swift
-- UiKit
+- Cocoapods
+- UIKit
 - Autolayout
 - Storyboard, Xib, верстка кодом
 - Git/GitHub
 - MVC/MVVM
 
-**Следующий этап изучения:**
+**В процессе изучения:**
 - JSON
+- Alamofire
+- SnapKit
+
+**Следующий этап изучения:**
 - SwiftUI
 - UserDefaults, Firebase
-- Alamofire
 - Local Notifications
 
 **Знаю и стараюсь практиковать:**
