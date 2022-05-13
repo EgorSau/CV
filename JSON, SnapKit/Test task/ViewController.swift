@@ -15,11 +15,6 @@ class ViewController: UIViewController {
         return JSONDecoder()
     }()
     
-//    private enum Constants {
-//        static let itemCount: CGFloat = 6
-//        static let spacing: CGFloat = 8
-//    }
-    
     private lazy var layout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical

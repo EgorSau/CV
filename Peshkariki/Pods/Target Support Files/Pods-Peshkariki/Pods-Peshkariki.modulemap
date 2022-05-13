@@ -1,0 +1,6 @@
+framework module Pods_Peshkariki {
+  umbrella header "Pods-Peshkariki-umbrella.h"
+
+  export *
+  module * { export * }
+}
