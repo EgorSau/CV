@@ -14,20 +14,18 @@ protocol Setupable {
     func setup(with viewModel: ViewModelProtocol)
 }
 
-class PhotosViewController: UIViewController {
+class PhotosViewController: UIViewController, UITextFieldDelegate {
     
     var numberOfSections = 1
-    var nameForVarButtonItem = "magnifyingglass"
-    
     var isExpanded = false
     let exitTapGestureRecognizer = UITapGestureRecognizer()
-    
     var images = [UIImage]()
-    
     var topConstraint: NSLayoutConstraint?
     var leftConstraint: NSLayoutConstraint?
     var rightConstraint: NSLayoutConstraint?
     var bottomConstraint: NSLayoutConstraint?
+    let token = "xOZhFXxLD9YKp4qiq7SaLlJzLLs8nHrTCdUtOOQlmAc"
+    var searchText: String = ""
     
     struct ViewModel: ViewModelProtocol {
         let author: String
@@ -35,14 +33,23 @@ class PhotosViewController: UIViewController {
         let location: String
     }
     
-    private lazy var textField: UITextField = {
-        var textField = UITextField()
-        textField.backgroundColor = .systemGray2
-        textField.layer.borderColor = UIColor.black.cgColor
+    lazy var textField: UITextField = {
+        let textField = UITextField()
+        textField.backgroundColor = .white
+        textField.layer.borderColor = UIColor.systemBlue.cgColor
         textField.layer.borderWidth = 1
+        textField.layer.cornerRadius = 8
         textField.isHidden = true
         textField.alpha = 0
         textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.textColor = .black
+        textField.font = .systemFont(ofSize: 16, weight: .regular)
+        textField.tintColor = UIColor.systemBlue
+        textField.autocapitalizationType = .sentences
+        textField.placeholder = " Search"
+//        textField.enablesReturnKeyAutomatically = true
+//        textField.addTarget(self, action: #selector(searchRequest), for: .editingChanged)
+//        textField.addTarget(self, action: #selector(textChange), for: .editingChanged)
         return textField
     }()
     
@@ -114,15 +121,14 @@ class PhotosViewController: UIViewController {
     
     private func setupTextField(){
         self.view.addSubview(textField)
+        self.textField.delegate = self
         
         let top = self.textField.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: -40)
-        let right = self.textField.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -50)
         let left = self.textField.leftAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leftAnchor, constant: 8)
         let height = self.textField.heightAnchor.constraint(equalToConstant: 40)
-        let width = self.textField.widthAnchor.constraint(equalToConstant: 400)
+        let width = self.textField.widthAnchor.constraint(equalToConstant: 350)
         
         NSLayoutConstraint.activate([top,
-                                     right,
                                      left,
                                      height,
                                      width
@@ -131,10 +137,10 @@ class PhotosViewController: UIViewController {
     
     private func setupCollectionView(){
         self.navigationItem.title = "Photo Gallery"
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: self.nameForVarButtonItem),
-                                                                 style: .plain,
-                                                                 target: self,
-                                                                 action: #selector(searchAppearance))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"),
+                                                                                style: .plain,
+                                                                                target: self,
+                                                                                action: #selector(searchAppearance))
         self.navigationController?.navigationBar.isHidden = false
         self.view.addSubview(self.collectionView)
         
@@ -221,6 +227,61 @@ class PhotosViewController: UIViewController {
             self.images = imagesArray
             completion(imagesArray)
         }
+//        self.collectionView.reloadData()
+    }
+    
+//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+//        self.searchText = textField.text!
+//        self.searchRequest{ _ in
+//            //
+//        }
+//        return true
+//    }
+    
+    @objc private func textChange(_ textField: UITextField){
+        self.searchText = textField.text!
+        print(self.searchText)
+    }
+    @objc private func searchRequest(completion: @escaping ([UIImage]) -> Void){
+//    @objc private func searchRequest(){
+        let url = URL(string: "https://api.unsplash.com/search/photos?query=\(self.searchText)")
+        var request = URLRequest(url: url!)
+        request.setValue("Client-ID \(self.token)", forHTTPHeaderField: "Authorization")
+        AF.request(request).responseDecodable(of: Results.self) { response in
+            guard let value = response.value else { return }
+            var imagesArray = [UIImage]()
+            for each in value.results {
+                guard let pictureName = each.urls.small else { return }
+                guard let url = URL(string: pictureName)
+                else {
+                    print("Unable to create URL")
+                    return
+                }
+                do {
+                    let data = try Data(contentsOf: url, options: [])
+                    guard let image = UIImage(data: data) else { return }
+                    imagesArray.append(image)
+                }
+                catch {
+                    print(error.localizedDescription)
+                }
+            }
+//            self.numberOfSections = imagesArray.count
+//            self.images = imagesArray
+//            print(self.images)
+//            print(imagesArray.count)
+            self.collectionView.reloadData()
+            completion(imagesArray)
+        }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.searchText = textField.text!
+        print("works2")
+        self.searchRequest{ Pictures in
+            self.images = Pictures
+        }
+        return true
     }
     
     func imageZoom(forCell: IndexPath){
@@ -266,25 +327,42 @@ class PhotosViewController: UIViewController {
         }
     }
     
+
+    
     @objc private func searchAppearance(){
         UIView.animate(withDuration: 0.5, delay: 0.0) {
-            self.nameForVarButtonItem = "xmark"
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"),
+                                                                     style: .plain,
+                                                                     target: self,
+                                                                     action: #selector(self.searchDisappearance))
             self.navigationItem.title = ""
+            self.textField.becomeFirstResponder()
             self.textField.isHidden = false
             self.textField.alpha = 1.0
-            self.imageView.isHidden = false
-            self.imageView.alpha = 1.0
+            self.view.layoutIfNeeded()
+        }
+//        self.searchRequest()
+    }
+    
+    @objc private func searchDisappearance(){
+        UIView.animate(withDuration: 0.5, delay: 0.0) {
+            self.textField.alpha = 0
+            self.textField.isHidden = true
+            self.navigationItem.title = "Photo Gallery"
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"),
+                                                                     style: .plain,
+                                                                     target: self,
+                                                                     action: #selector(self.searchAppearance))
             self.view.layoutIfNeeded()
         }
     }
-    
 }
 
 extension PhotosViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        //надо проверить сколько тут всего ячеек array.count
         return 10
+//        print(self.numberOfSections)
 //        return self.numberOfSections
     }
     
@@ -293,10 +371,16 @@ extension PhotosViewController: UICollectionViewDataSource, UICollectionViewDele
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DefaultCell", for: indexPath)
             return cell
         }
-        cell.backgroundColor = .systemPink
-        self.urlRequest { Pictures in
-            cell.photoImage.image = Pictures[indexPath.row]
+        cell.backgroundColor = .systemBlue
+
+        if self.images.isEmpty {
+            self.urlRequest { Pictures in
+                cell.photoImage.image = Pictures[indexPath.row]
+            }
+        } else {
+            cell.photoImage.image = self.images[indexPath.row]
         }
+        
         return cell
     }
     

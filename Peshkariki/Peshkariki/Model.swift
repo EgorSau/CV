@@ -8,6 +8,7 @@
 import Alamofire
 import UIKit
 
+//Randome
     
 struct Pictures: Decodable {
     let created_at: String?
@@ -24,4 +25,15 @@ struct Users: Decodable {
     let location: String?
 }
 
-//Экран подробной информации содержит в себе  количество скачиваний.
+//Search
+
+struct Results: Decodable {
+    let results: [Result]
+}
+
+struct Result: Decodable {
+    let id: String
+    let description: String?
+    let urls: Urls
+}
+
