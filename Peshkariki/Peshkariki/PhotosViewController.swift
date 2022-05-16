@@ -20,6 +20,9 @@ class PhotosViewController: UIViewController, UITextFieldDelegate {
     var isExpanded = false
     let exitTapGestureRecognizer = UITapGestureRecognizer()
     var images = [UIImage]()
+    var authors = [String?]()
+    var dates = [String?]()
+    var locations = [String?]()
     var topConstraint: NSLayoutConstraint?
     var leftConstraint: NSLayoutConstraint?
     var rightConstraint: NSLayoutConstraint?
@@ -53,10 +56,26 @@ class PhotosViewController: UIViewController, UITextFieldDelegate {
         return textField
     }()
     
+    private lazy var addButton: UIButton = {
+        var addButton = UIButton()
+        addButton.isHidden = true
+        addButton.backgroundColor = .systemRed
+        addButton.setTitle("Add or delete from Favorites", for: .normal)
+        addButton.setTitleColor(.white, for: .normal)
+        addButton.alpha = 0
+        addButton.layer.cornerRadius = 8
+        addButton.titleLabel?.text = ""
+        addButton.translatesAutoresizingMaskIntoConstraints = false
+        return addButton
+    }()
+    
     private lazy var photoLabel: UILabel = {
         var photoLabel = UILabel()
+        photoLabel.numberOfLines = 3
+        photoLabel.lineBreakStrategy = .pushOut
         photoLabel.isHidden = true
-        photoLabel.backgroundColor = .systemPink
+        photoLabel.backgroundColor = .systemBlue
+        photoLabel.textColor = .white
         photoLabel.alpha = 0
         photoLabel.translatesAutoresizingMaskIntoConstraints = false
         return photoLabel
@@ -113,6 +132,7 @@ class PhotosViewController: UIViewController, UITextFieldDelegate {
         self.setupGesture()
         self.setupTextField()
         self.photoLabelSetup()
+        self.buttonSetup()
     }
     
     private func viewSetup(){
@@ -187,6 +207,20 @@ class PhotosViewController: UIViewController, UITextFieldDelegate {
                                     ])
     }
     
+    private func buttonSetup(){
+        self.view.addSubview(addButton)
+
+        let top = self.addButton.topAnchor.constraint(equalTo: self.photoLabel.bottomAnchor, constant: 20)
+        let right = self.addButton.rightAnchor.constraint(equalTo: self.view.rightAnchor)
+        let left = self.addButton.leftAnchor.constraint(equalTo: self.view.leftAnchor)
+
+        NSLayoutConstraint.activate([
+                                    top,
+                                    right,
+                                    left
+                                    ])
+    }
+    
     private func exitSetup(){
         self.view.addSubview(exitImageView)
         
@@ -208,6 +242,15 @@ class PhotosViewController: UIViewController, UITextFieldDelegate {
             guard let value = response.value else { return }
             var imagesArray = [UIImage]()
             for each in value {
+                //String data
+                let author = each.user.name
+                let creation_date = each.created_at
+                let location = each.user.location
+                self.authors.append(author)
+                self.dates.append(creation_date)
+                self.locations.append(location)
+                
+                //Pictures data
                 guard let pictureName = each.urls.small else { return }
                 guard let url = URL(string: pictureName)
                 else {
@@ -223,13 +266,12 @@ class PhotosViewController: UIViewController, UITextFieldDelegate {
                     print(error.localizedDescription)
                 }
             }
-//            self.numberOfSections = picturesArray.count
             self.images = imagesArray
             completion(imagesArray)
         }
-//        self.collectionView.reloadData()
     }
     
+    //MARK: Search pictures by each latter
 //    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 //        self.searchText = textField.text!
 //        self.searchRequest{ _ in
@@ -237,13 +279,13 @@ class PhotosViewController: UIViewController, UITextFieldDelegate {
 //        }
 //        return true
 //    }
+//
+//    @objc private func textChange(_ textField: UITextField){
+//        self.searchText = textField.text!
+//        print(self.searchText)
+//    }
     
-    @objc private func textChange(_ textField: UITextField){
-        self.searchText = textField.text!
-        print(self.searchText)
-    }
     @objc private func searchRequest(completion: @escaping ([UIImage]) -> Void){
-//    @objc private func searchRequest(){
         let url = URL(string: "https://api.unsplash.com/search/photos?query=\(self.searchText)")
         var request = URLRequest(url: url!)
         request.setValue("Client-ID \(self.token)", forHTTPHeaderField: "Authorization")
@@ -251,6 +293,15 @@ class PhotosViewController: UIViewController, UITextFieldDelegate {
             guard let value = response.value else { return }
             var imagesArray = [UIImage]()
             for each in value.results {
+                //String data
+                let author = each.user.name
+                let creation_date = each.created_at
+                let location = each.user.location
+                self.authors.append(author)
+                self.dates.append(creation_date)
+                self.locations.append(location)
+                
+                //Pictures data
                 guard let pictureName = each.urls.small else { return }
                 guard let url = URL(string: pictureName)
                 else {
@@ -266,10 +317,6 @@ class PhotosViewController: UIViewController, UITextFieldDelegate {
                     print(error.localizedDescription)
                 }
             }
-//            self.numberOfSections = imagesArray.count
-//            self.images = imagesArray
-//            print(self.images)
-//            print(imagesArray.count)
             self.collectionView.reloadData()
             completion(imagesArray)
         }
@@ -277,7 +324,6 @@ class PhotosViewController: UIViewController, UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.searchText = textField.text!
-        print("works2")
         self.searchRequest{ Pictures in
             self.images = Pictures
         }
@@ -286,6 +332,14 @@ class PhotosViewController: UIViewController, UITextFieldDelegate {
     
     func imageZoom(forCell: IndexPath){
         self.imageView.image = self.images[forCell.row]
+        guard let author = self.authors[forCell.row] else { return }
+        guard let date = self.dates[forCell.row] else { return }
+        guard let location = self.locations[forCell.row] else { return }
+        let viewModel = PhotosViewController.ViewModel(author: author,
+                                                       creationDate: date,
+                                                       location: location)
+        
+        self.setup(with: viewModel)
 
         UIView.animate(withDuration: 0.5, delay: 0.0) {
             
@@ -293,6 +347,8 @@ class PhotosViewController: UIViewController, UITextFieldDelegate {
             self.imageView.alpha = 1
             self.photoLabel.isHidden = false
             self.photoLabel.alpha = 1
+            self.addButton.isHidden = false
+            self.addButton.alpha = 1
             self.topConstraint?.isActive = false
             self.leftConstraint?.isActive = false
             self.rightConstraint?.isActive = false
@@ -317,6 +373,8 @@ class PhotosViewController: UIViewController, UITextFieldDelegate {
             
             UIView.animate(withDuration: 0.5, delay: 0.0) {
                 self.imageView.alpha = 0
+                self.photoLabel.alpha = 0
+                self.addButton.alpha = 0
                 self.exitImageView.alpha = 0
                 self.topConstraint?.isActive = true
                 self.leftConstraint?.isActive = true
@@ -362,8 +420,6 @@ extension PhotosViewController: UICollectionViewDataSource, UICollectionViewDele
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 10
-//        print(self.numberOfSections)
-//        return self.numberOfSections
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -402,8 +458,6 @@ extension PhotosViewController: Setupable {
     func setup(with viewModel: ViewModelProtocol) {
         guard let viewModel = viewModel as? ViewModel else { return }
         //MARK: To check how to make text from next line
-        self.photoLabel.text = viewModel.author
-        self.photoLabel.text = viewModel.creationDate
-        self.photoLabel.text = viewModel.location
+        self.photoLabel.text = "Author: \(viewModel.author)\nCreation date: \(viewModel.creationDate)\nLocation: \(viewModel.location)"
     }
 }

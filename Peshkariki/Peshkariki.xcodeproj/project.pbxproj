@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2002E1B028316CD500AEAD75 /* PhotosTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2002E1AF28316CD500AEAD75 /* PhotosTableViewCell.swift */; };
 		2008DB9728226D1F008EE883 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2008DB9628226D1F008EE883 /* TabBarController.swift */; };
 		2008DB9928226EDD008EE883 /* PhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2008DB9828226EDD008EE883 /* PhotosViewController.swift */; };
 		2008DB9B28227360008EE883 /* PhotosCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2008DB9A28227360008EE883 /* PhotosCollectionViewCell.swift */; };
@@ -21,6 +22,7 @@
 
 /* Begin PBXFileReference section */
 		01D26F6A9D6B03532DE78A9F /* Pods-Peshkariki.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Peshkariki.debug.xcconfig"; path = "Target Support Files/Pods-Peshkariki/Pods-Peshkariki.debug.xcconfig"; sourceTree = "<group>"; };
+		2002E1AF28316CD500AEAD75 /* PhotosTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosTableViewCell.swift; sourceTree = "<group>"; };
 		2008DB9628226D1F008EE883 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		2008DB9828226EDD008EE883 /* PhotosViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosViewController.swift; sourceTree = "<group>"; };
 		2008DB9A28227360008EE883 /* PhotosCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -48,10 +50,58 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2002E1B32831700600AEAD75 /* TabBar */ = {
+			isa = PBXGroup;
+			children = (
+				2008DB9628226D1F008EE883 /* TabBarController.swift */,
+			);
+			name = TabBar;
+			sourceTree = "<group>";
+		};
+		2002E1B42831701D00AEAD75 /* Scene */ = {
+			isa = PBXGroup;
+			children = (
+				2019598528226B8800CD5142 /* AppDelegate.swift */,
+				2019598728226B8800CD5142 /* SceneDelegate.swift */,
+			);
+			path = Scene;
+			sourceTree = "<group>";
+		};
+		2002E1B52831702C00AEAD75 /* Collection */ = {
+			isa = PBXGroup;
+			children = (
+				2008DB9C2822B96C008EE883 /* Model.swift */,
+				2008DB9828226EDD008EE883 /* PhotosViewController.swift */,
+				2008DB9A28227360008EE883 /* PhotosCollectionViewCell.swift */,
+			);
+			name = Collection;
+			sourceTree = "<group>";
+		};
+		2002E1B62831703E00AEAD75 /* Table */ = {
+			isa = PBXGroup;
+			children = (
+				2019598928226B8800CD5142 /* TableViewController.swift */,
+				2002E1AF28316CD500AEAD75 /* PhotosTableViewCell.swift */,
+			);
+			path = Table;
+			sourceTree = "<group>";
+		};
+		2002E1B72831705300AEAD75 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				2019598E28226B8900CD5142 /* Assets.xcassets */,
+				2019599028226B8900CD5142 /* LaunchScreen.storyboard */,
+				2019599328226B8900CD5142 /* Info.plist */,
+			);
+			name = Resources;
+			path = Peshkariki;
+			sourceTree = "<group>";
+		};
 		2019597928226B8700CD5142 = {
 			isa = PBXGroup;
 			children = (
 				2019598428226B8800CD5142 /* Peshkariki */,
+				2002E1B72831705300AEAD75 /* Resources */,
 				2019598328226B8800CD5142 /* Products */,
 				6386AB5558ECEFAB09E6B4F6 /* Pods */,
 				E680B514DED66880D75C6961 /* Frameworks */,
@@ -69,16 +119,10 @@
 		2019598428226B8800CD5142 /* Peshkariki */ = {
 			isa = PBXGroup;
 			children = (
-				2019598528226B8800CD5142 /* AppDelegate.swift */,
-				2019598728226B8800CD5142 /* SceneDelegate.swift */,
-				2008DB9C2822B96C008EE883 /* Model.swift */,
-				2008DB9628226D1F008EE883 /* TabBarController.swift */,
-				2008DB9828226EDD008EE883 /* PhotosViewController.swift */,
-				2008DB9A28227360008EE883 /* PhotosCollectionViewCell.swift */,
-				2019598928226B8800CD5142 /* TableViewController.swift */,
-				2019598E28226B8900CD5142 /* Assets.xcassets */,
-				2019599028226B8900CD5142 /* LaunchScreen.storyboard */,
-				2019599328226B8900CD5142 /* Info.plist */,
+				2002E1B42831701D00AEAD75 /* Scene */,
+				2002E1B32831700600AEAD75 /* TabBar */,
+				2002E1B52831702C00AEAD75 /* Collection */,
+				2002E1B62831703E00AEAD75 /* Table */,
 			);
 			path = Peshkariki;
 			sourceTree = "<group>";
@@ -218,6 +262,7 @@
 				2008DB9728226D1F008EE883 /* TabBarController.swift in Sources */,
 				2019598628226B8800CD5142 /* AppDelegate.swift in Sources */,
 				2019598828226B8800CD5142 /* SceneDelegate.swift in Sources */,
+				2002E1B028316CD500AEAD75 /* PhotosTableViewCell.swift in Sources */,
 				2008DB9928226EDD008EE883 /* PhotosViewController.swift in Sources */,
 				2008DB9D2822B96C008EE883 /* Model.swift in Sources */,
 				2008DB9B28227360008EE883 /* PhotosCollectionViewCell.swift in Sources */,
