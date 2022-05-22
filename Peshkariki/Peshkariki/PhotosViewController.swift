@@ -16,7 +16,6 @@ protocol Setupable {
 
 class PhotosViewController: UIViewController, UITextFieldDelegate {
     
-    var numberOfSections = 1
     var isExpanded = false
     let exitTapGestureRecognizer = UITapGestureRecognizer()
     var images = [UIImage]()
@@ -29,6 +28,12 @@ class PhotosViewController: UIViewController, UITextFieldDelegate {
     var bottomConstraint: NSLayoutConstraint?
     let token = "xOZhFXxLD9YKp4qiq7SaLlJzLLs8nHrTCdUtOOQlmAc"
     var searchText: String = ""
+
+    var tempStrArray = [String]()
+    var tempImgArray = [UIImage]()
+//    var tempIndPathArray = [IndexPath]()
+    var dictionary: [String : Any] = ["authors": [String](), "images": [UIImage]()]
+//    var dictOfIndexPath = ["indexPath": [IndexPath]()]
     
     struct ViewModel: ViewModelProtocol {
         let author: String
@@ -59,13 +64,28 @@ class PhotosViewController: UIViewController, UITextFieldDelegate {
     private lazy var addButton: UIButton = {
         var addButton = UIButton()
         addButton.isHidden = true
-        addButton.backgroundColor = .systemRed
-        addButton.setTitle("Add or delete from Favorites", for: .normal)
+        addButton.backgroundColor = .systemGreen
+        addButton.setTitle("Add to Favorites", for: .normal)
         addButton.setTitleColor(.white, for: .normal)
         addButton.alpha = 0
         addButton.layer.cornerRadius = 8
         addButton.titleLabel?.text = ""
         addButton.translatesAutoresizingMaskIntoConstraints = false
+        addButton.addTarget(.none, action: #selector(addToFavorites), for: .touchUpInside)
+        return addButton
+    }()
+    
+    private lazy var deleteButton: UIButton = {
+        var addButton = UIButton()
+        addButton.isHidden = true
+        addButton.backgroundColor = .systemRed
+        addButton.setTitle("Delete from Favorites", for: .normal)
+        addButton.setTitleColor(.white, for: .normal)
+        addButton.alpha = 0
+        addButton.layer.cornerRadius = 8
+        addButton.titleLabel?.text = ""
+        addButton.translatesAutoresizingMaskIntoConstraints = false
+        addButton.addTarget(.none, action: #selector(deleteFromFavorites), for: .touchUpInside)
         return addButton
     }()
     
@@ -132,7 +152,7 @@ class PhotosViewController: UIViewController, UITextFieldDelegate {
         self.setupGesture()
         self.setupTextField()
         self.photoLabelSetup()
-        self.buttonSetup()
+        self.buttonsSetup()
     }
     
     private func viewSetup(){
@@ -207,17 +227,39 @@ class PhotosViewController: UIViewController, UITextFieldDelegate {
                                     ])
     }
     
-    private func buttonSetup(){
+    private func buttonsSetup(){
         self.view.addSubview(addButton)
-
+        self.view.addSubview(deleteButton)
+        
+        enum Constants: CGFloat {
+            case positiveBasicSpacing = 8
+            case negativeBasicSpacing = -8
+        }
+        
+        //MARK: Add button
         let top = self.addButton.topAnchor.constraint(equalTo: self.photoLabel.bottomAnchor, constant: 20)
-        let right = self.addButton.rightAnchor.constraint(equalTo: self.view.rightAnchor)
-        let left = self.addButton.leftAnchor.constraint(equalTo: self.view.leftAnchor)
+        let left = self.addButton.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: Constants.positiveBasicSpacing.rawValue)
 
+        //MARK: Delete button
+        let top2 = self.deleteButton.topAnchor.constraint(equalTo: self.photoLabel.bottomAnchor, constant: 20)
+        let left2 = self.deleteButton.leftAnchor.constraint(equalTo: self.addButton.rightAnchor, constant: Constants.positiveBasicSpacing.rawValue)
+        let right = self.deleteButton.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: Constants.negativeBasicSpacing.rawValue)
+        
+        //MARK: Width calculation
+
+        let screenWidth = CGFloat(self.view.frame.width)
+        let buttonsWidth = (screenWidth - Constants.positiveBasicSpacing.rawValue * 3)/2
+        let width = self.addButton.widthAnchor.constraint(equalToConstant: buttonsWidth)
+        let width2 = self.deleteButton.widthAnchor.constraint(equalToConstant: buttonsWidth)
+        
         NSLayoutConstraint.activate([
                                     top,
+                                    top2,
                                     right,
-                                    left
+                                    left,
+                                    left2,
+                                    width,
+                                    width2
                                     ])
     }
     
@@ -236,7 +278,7 @@ class PhotosViewController: UIViewController, UITextFieldDelegate {
                                     ])
     }
     
-    private func urlRequest(completion: @escaping ([UIImage]) -> Void) {
+    func urlRequest(completion: @escaping ([UIImage]) -> Void) {
         let url = "https://api.unsplash.com/photos/?client_id=xOZhFXxLD9YKp4qiq7SaLlJzLLs8nHrTCdUtOOQlmAc"
         AF.request(url).responseDecodable(of: [Pictures].self) { response in
             guard let value = response.value else { return }
@@ -329,18 +371,67 @@ class PhotosViewController: UIViewController, UITextFieldDelegate {
         }
         return true
     }
+
+    @objc func deleteFromFavorites(){
+        for (index, image) in tempImgArray.enumerated() {
+            guard self.imageView.image == image else { return }
+            self.tempImgArray.remove(at: index)
+            self.tempStrArray.remove(at: index)
+            self.dictionary["authors"] = self.tempStrArray
+            self.dictionary["images"] = self.tempImgArray
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "dataFromCollection"), object: nil, userInfo: self.dictionary)
+            self.collectionView.reloadData()
+            self.deletedAlert()
+        }
+    }
+    
+    @objc func addToFavorites(){
+        guard let image = self.imageView.image else { return }
+        self.tempImgArray.append(image)
+        guard let author = self.photoLabel.text else { return }
+        self.tempStrArray.append(author)
+        self.dictionary["authors"] = self.tempStrArray
+        self.dictionary["images"] = self.tempImgArray
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "dataFromCollection"), object: nil, userInfo: self.dictionary)
+        self.collectionView.reloadData()
+        self.addedAlert()
+    }
+    
+    private func deletedAlert() {
+        let alert = UIAlertController(title: "Warning!", message: "This picture was deleted from favorites", preferredStyle: .alert)
+        let action = UIAlertAction(title: "ОК", style: .default)
+        present(alert, animated: true, completion: .none)
+        alert.addAction(action)
+    }
+    
+    private func addedAlert() {
+        let alert = UIAlertController(title: "Great!", message: "This picture was added to favorites", preferredStyle: .alert)
+        let action = UIAlertAction(title: "ОК", style: .default)
+        present(alert, animated: true, completion: .none)
+        alert.addAction(action)
+    }
     
     func imageZoom(forCell: IndexPath){
         self.imageView.image = self.images[forCell.row]
         guard let author = self.authors[forCell.row] else { return }
         guard let date = self.dates[forCell.row] else { return }
-        guard let location = self.locations[forCell.row] else { return }
+        
+        var newLocations = [String?]()
+        for location in locations {
+            if location == nil {
+                newLocations.append("No location")
+            } else {
+                newLocations.append(location)
+            }
+        }
+
+        guard let location = newLocations[forCell.row] else { return }
         let viewModel = PhotosViewController.ViewModel(author: author,
                                                        creationDate: date,
                                                        location: location)
         
         self.setup(with: viewModel)
-
+        
         UIView.animate(withDuration: 0.5, delay: 0.0) {
             
             self.imageView.isHidden = false
@@ -349,6 +440,8 @@ class PhotosViewController: UIViewController, UITextFieldDelegate {
             self.photoLabel.alpha = 1
             self.addButton.isHidden = false
             self.addButton.alpha = 1
+            self.deleteButton.isHidden = false
+            self.deleteButton.alpha = 1
             self.topConstraint?.isActive = false
             self.leftConstraint?.isActive = false
             self.rightConstraint?.isActive = false
@@ -358,6 +451,9 @@ class PhotosViewController: UIViewController, UITextFieldDelegate {
             self.exitImageView.alpha = 1
             self.view.layoutIfNeeded()
         }
+//        self.tempIndPathArray.append(forCell)
+//        self.dictOfIndexPath["indexPath"] = self.tempIndPathArray
+//        NotificationCenter.default.post(name: Notification.Name(rawValue: "dataAboutIndexPath"), object: nil, userInfo: self.dictOfIndexPath)
     }
     
     func setupGesture(){
@@ -375,6 +471,7 @@ class PhotosViewController: UIViewController, UITextFieldDelegate {
                 self.imageView.alpha = 0
                 self.photoLabel.alpha = 0
                 self.addButton.alpha = 0
+                self.deleteButton.alpha = 0
                 self.exitImageView.alpha = 0
                 self.topConstraint?.isActive = true
                 self.leftConstraint?.isActive = true

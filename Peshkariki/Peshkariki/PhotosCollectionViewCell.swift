@@ -18,7 +18,6 @@ class PhotosCollectionViewCell: UICollectionViewCell {
         photoImage.translatesAutoresizingMaskIntoConstraints = false
         photoImage.contentMode = .scaleAspectFill
         photoImage.clipsToBounds = true
-        photoImage.isUserInteractionEnabled = true
         return photoImage
     }()
     

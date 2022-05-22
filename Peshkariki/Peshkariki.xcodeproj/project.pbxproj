@@ -15,8 +15,8 @@
 		2019598628226B8800CD5142 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2019598528226B8800CD5142 /* AppDelegate.swift */; };
 		2019598828226B8800CD5142 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2019598728226B8800CD5142 /* SceneDelegate.swift */; };
 		2019598A28226B8800CD5142 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2019598928226B8800CD5142 /* TableViewController.swift */; };
-		2019598F28226B8900CD5142 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2019598E28226B8900CD5142 /* Assets.xcassets */; };
 		2019599228226B8900CD5142 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2019599028226B8900CD5142 /* LaunchScreen.storyboard */; };
+		201C5037283A990000F9B92B /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 201C5036283A990000F9B92B /* DetailsViewController.swift */; };
 		991593A01AB21C746E9062CB /* Pods_Peshkariki.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E63C9FAE2CB90540A42DF451 /* Pods_Peshkariki.framework */; };
 /* End PBXBuildFile section */
 
@@ -31,9 +31,10 @@
 		2019598528226B8800CD5142 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2019598728226B8800CD5142 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		2019598928226B8800CD5142 /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
-		2019598E28226B8900CD5142 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2019599128226B8900CD5142 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2019599328226B8900CD5142 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		201C5036283A990000F9B92B /* DetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
+		206C2004283AE5A500AFC2B9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		842FDE163E40F614C3FF80DD /* Pods-Peshkariki.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Peshkariki.release.xcconfig"; path = "Target Support Files/Pods-Peshkariki/Pods-Peshkariki.release.xcconfig"; sourceTree = "<group>"; };
 		E63C9FAE2CB90540A42DF451 /* Pods_Peshkariki.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Peshkariki.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -81,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				2019598928226B8800CD5142 /* TableViewController.swift */,
+				201C5036283A990000F9B92B /* DetailsViewController.swift */,
 				2002E1AF28316CD500AEAD75 /* PhotosTableViewCell.swift */,
 			);
 			path = Table;
@@ -89,7 +91,7 @@
 		2002E1B72831705300AEAD75 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				2019598E28226B8900CD5142 /* Assets.xcassets */,
+				206C2004283AE5A500AFC2B9 /* Assets.xcassets */,
 				2019599028226B8900CD5142 /* LaunchScreen.storyboard */,
 				2019599328226B8900CD5142 /* Info.plist */,
 			);
@@ -205,7 +207,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2019599228226B8900CD5142 /* LaunchScreen.storyboard in Resources */,
-				2019598F28226B8900CD5142 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -260,6 +261,7 @@
 			files = (
 				2019598A28226B8800CD5142 /* TableViewController.swift in Sources */,
 				2008DB9728226D1F008EE883 /* TabBarController.swift in Sources */,
+				201C5037283A990000F9B92B /* DetailsViewController.swift in Sources */,
 				2019598628226B8800CD5142 /* AppDelegate.swift in Sources */,
 				2019598828226B8800CD5142 /* SceneDelegate.swift in Sources */,
 				2002E1B028316CD500AEAD75 /* PhotosTableViewCell.swift in Sources */,
