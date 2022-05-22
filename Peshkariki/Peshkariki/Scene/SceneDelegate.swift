@@ -1,8 +1,8 @@
 //
 //  SceneDelegate.swift
-//  Test task
+//  Peshkariki
 //
-//  Created by Egor SAUSHKIN on 01.04.2022.
+//  Created by Egor SAUSHKIN on 04.05.2022.
 //
 
 import UIKit
@@ -17,11 +17,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
-        window = UIWindow (windowScene: windowScene)
-//        window?.rootViewController = ViewController()
-        window?.rootViewController = TestViewController()
+        window = UIWindow (frame: windowScene.coordinateSpace.bounds)
+        window?.windowScene = windowScene
+        window?.rootViewController = TabBarController()
         window?.makeKeyAndVisible()
-        
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

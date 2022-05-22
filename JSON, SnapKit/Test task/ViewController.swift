@@ -15,11 +15,6 @@ class ViewController: UIViewController {
         return JSONDecoder()
     }()
     
-//    private enum Constants {
-//        static let itemCount: CGFloat = 6
-//        static let spacing: CGFloat = 8
-//    }
-    
     private lazy var layout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -47,11 +42,6 @@ class ViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.collection.setNeedsLayout()
-        self.collection.layoutIfNeeded()
-        let cell = CustomCollectionViewCell()
-        let size1 = cell.button.bounds.width
-        print(size1)
     }
         
     private func urlRequest(completion: @escaping ([String]) -> Void) {
@@ -100,10 +90,4 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegateFl
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 120, height: 35)
     }
-//    override func collectionViewContentSize() -> CGSize {
-//      return CGSize(width: CGFloat(collectionView!.numberOfItemsInSection(0)) * itemSize.width,
-//          height: CGRectGetHeight(collectionView!.bounds))
-//    }
-//The height will be the same as the collection view, but its width will be itemSize.width * numberOfItems.
-    
 }

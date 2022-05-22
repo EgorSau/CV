@@ -27,12 +27,9 @@ class CustomCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-//        self.contentView.backgroundColor = .yellow
         self.activateButtonConstraints()
         self.contentView.frame = self.button.frame
         self.contentView.contentMode = .redraw
-        self.layoutIfNeeded()
-        self.setNeedsLayout()
     }
     
     private func activateButtonConstraints(){
@@ -47,10 +44,6 @@ class CustomCollectionViewCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-//    func setup(with text: String) {
-//        self.button.setTitle(text, for: .normal)
-//    }
     
     @objc private func updateColor() {
         if button.isSelected == false {

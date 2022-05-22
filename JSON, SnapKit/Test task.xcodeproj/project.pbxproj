@@ -13,6 +13,8 @@
 		20106F4727F8C43D00563E77 /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20106F4327F8C22000563E77 /* SnapKit.framework */; };
 		20106F4A27F8D37D00563E77 /* CustomCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20106F4927F8D37D00563E77 /* CustomCollectionViewCell.swift */; };
 		20106F4C27F97A2B00563E77 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 20106F4B27F97A2B00563E77 /* Assets.xcassets */; };
+		2013D5732814628D00F9B468 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2013D5722814628D00F9B468 /* TestViewController.swift */; };
+		2013D5752814643900F9B468 /* TestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2013D5742814643900F9B468 /* TestTableViewCell.swift */; };
 		2058B2B827F752F1001DD108 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2058B2B727F752F1001DD108 /* AppDelegate.swift */; };
 		2058B2BA27F752F1001DD108 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2058B2B927F752F1001DD108 /* SceneDelegate.swift */; };
 		2058B2BC27F752F1001DD108 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2058B2BB27F752F1001DD108 /* ViewController.swift */; };
@@ -27,6 +29,8 @@
 		20106F4327F8C22000563E77 /* SnapKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SnapKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		20106F4927F8D37D00563E77 /* CustomCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewCell.swift; sourceTree = "<group>"; };
 		20106F4B27F97A2B00563E77 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2013D5722814628D00F9B468 /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
+		2013D5742814643900F9B468 /* TestTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTableViewCell.swift; sourceTree = "<group>"; };
 		2058B2B427F752F1001DD108 /* Test task.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Test task.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2058B2B727F752F1001DD108 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2058B2B927F752F1001DD108 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -82,6 +86,8 @@
 				2058B2C227F752F3001DD108 /* LaunchScreen.storyboard */,
 				20106F4B27F97A2B00563E77 /* Assets.xcassets */,
 				2058B2C527F752F3001DD108 /* Info.plist */,
+				2013D5722814628D00F9B468 /* TestViewController.swift */,
+				2013D5742814643900F9B468 /* TestTableViewCell.swift */,
 			);
 			path = "Test task";
 			sourceTree = "<group>";
@@ -224,6 +230,8 @@
 				20106F4A27F8D37D00563E77 /* CustomCollectionViewCell.swift in Sources */,
 				2058B2B827F752F1001DD108 /* AppDelegate.swift in Sources */,
 				2058B2BA27F752F1001DD108 /* SceneDelegate.swift in Sources */,
+				2013D5732814628D00F9B468 /* TestViewController.swift in Sources */,
+				2013D5752814643900F9B468 /* TestTableViewCell.swift in Sources */,
 				20106F2027F8B13100563E77 /* Model.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
